@@ -32,9 +32,7 @@ The Intel(R) DevCloud is the fastest way to get started with oneAPI.
 In order to sign up please go here: https://intelsoftwaresites.secure.force.com/devcloud/oneapi.
 If you already have an account please sign in here: https://devcloud.intel.com/oneapi/.
 
-Once your local system is configured for accessing Intel(R) DevCloud over SSH* please follow these steps:
-
-0. ssh devcloud
+Once you have connected to the Intel(R) DevCloud and cloned the samples, please follow the steps below.
 
 For CPU/GPU:
 1. Run the following command to build the buffer & USM versions of the sample:
@@ -42,7 +40,7 @@ For CPU/GPU:
    qsub build.sh
    ```
 
-2. Execute the sample using the following command:
+2. Execute the sample using the following command after the completion of the build task:
    ```
    qsub run.sh
    ```
@@ -53,7 +51,7 @@ For FPGA Emulator:
    qsub build_fpga_emu.sh
    ```
 
-2. Execute the sample using the following command:
+2. Execute the sample using the following command after the completion of the build task:
    ```
    qsub run_fpga_emu.sh
    ```
@@ -68,8 +66,9 @@ For FPGA HW:
    ```
    qsub run_fpga_hw.sh -W depend=afterok:$build_fpga_hw_job_id
    ```
+
 > Note: The build for FPGA HW usually takes more time to complete than the build for CPU/GPU or FPGA Emulator.
-The parameter ' -W depend=afterok:' is used to enqueue the execution of the sample on FPGA HW automatically after the completion of the build for the FPGA HW.
+The parameter ' -W depend=afterok:' is used to enqueue the execution of the sample on the FPGA HW automatically after the successful completion of the build task.
 
 ### On a Linux* System
 Perform the following steps:

@@ -27,10 +27,10 @@ This code sample is licensed under MIT license.
 
 ## Building the `vector-add` Program for CPU and GPU 
 
-### On Intel(R) DevCloud
+### On Intel(r) DevCloud
 The Intel(R) DevCloud is the fastest way to get started with oneAPI.
 In order to sign up please go here: https://intelsoftwaresites.secure.force.com/devcloud/oneapi.
-If you already have an account please sign in here: https://devcloud.intel.com/oneapi/.
+If you already have an account please sign in here: https://devcloud.intel.com/oneapi/ and follow the instructions for connecting to the Intel(R) DevCloud.
 
 Once you have connected to the Intel(R) DevCloud and cloned the samples, please follow the steps below.
 

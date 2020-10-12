@@ -29,8 +29,9 @@ This code sample is licensed under MIT license.
 
 ### On Intel&#174; DevCloud
 The Intel&#174; DevCloud is the fastest way to get started with oneAPI.
-In order to sign up please go here: https://intelsoftwaresites.secure.force.com/devcloud/oneapi.
-If you already have an account please sign in here: https://devcloud.intel.com/oneapi/ and follow the instructions for connecting to the Intel&#174; DevCloud.
+In order to sign up please go [here](https://intelsoftwaresites.secure.force.com/devcloud/oneapi):
+
+If you already have an account please sign in [here](https://devcloud.intel.com/oneapi/) and follow the instructions for connecting to the Intel&#174; DevCloud.
 
 Once you have connected to the Intel&#174; DevCloud and cloned the samples, please follow the steps below.
 

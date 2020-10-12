@@ -3,19 +3,23 @@
 #PBS -l select=1:gpu:ppn=2
 #PBS -d .
 
-hostname
-
 source /opt/intel/inteloneapi/setvars.sh > /dev/null 2>&1
 
-make clean
-
+hostname
 echo
+
+make clean
+echo
+
 echo start: $(date "+%y%m%d.%H%M%S.%3N")
 echo
 
 make all
-
 echo
+
+make build_usm
+echo
+
 echo stop:  $(date "+%y%m%d.%H%M%S.%3N")
 echo
 

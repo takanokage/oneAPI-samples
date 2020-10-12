@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#PBS -l select=1:fpga:ppn=2
+#PBS -d .
+
 hostname
 
 source /opt/intel/inteloneapi/setvars.sh > /dev/null 2>&1

@@ -27,6 +27,50 @@ This code sample is licensed under MIT license.
 
 ## Building the `vector-add` Program for CPU and GPU 
 
+### On Intel(R) DevCloud
+The Intel(R) DevCloud is the fastest way to get started with oneAPI.
+In order to sign up please go here: https://intelsoftwaresites.secure.force.com/devcloud/oneapi.
+If you already have an account please sign in here: https://devcloud.intel.com/oneapi/.
+
+Once your local system is configured for accessing Intel(R) DevCloud over SSH* please follow these steps:
+
+0. ssh devcloud
+
+For CPU/GPU:
+1. Run the following command to build the buffer & USM versions of the sample:
+   ```
+   qsub build.sh
+   ```
+
+2. Execute the sample using the following command:
+   ```
+   qsub run.sh
+   ```
+
+For FPGA Emulator:
+1. Build the sample:
+   ```
+   qsub build_fpga_emu.sh
+   ```
+
+2. Execute the sample using the following command:
+   ```
+   qsub run_fpga_emu.sh
+   ```
+
+For FPGA HW:
+1. Build the sample:
+   ```
+   build_fpga_hw_job_id=$(qsub build_fpga_hw.sh)
+   ```
+
+2. Execute the sample using the following command:
+   ```
+   qsub run_fpga_hw.sh -W depend=afterok:$build_fpga_hw_job_id
+   ```
+> Note: The build for FPGA HW usually takes more time to complete than the build for CPU/GPU or FPGA Emulator.
+The parameter ' -W depend=afterok:' is used to enqueue the execution of the sample on FPGA HW automatically after the completion of the build for the FPGA HW.
+
 ### On a Linux* System
 Perform the following steps:
 1. Build the program using the following `make` commands (default uses buffers):

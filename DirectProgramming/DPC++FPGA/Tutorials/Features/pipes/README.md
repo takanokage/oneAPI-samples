@@ -7,7 +7,7 @@ This FPGA tutorial shows how to use pipes to transfer data between kernels.
 ---                                 |---
 | OS                                | Linux* Ubuntu* 18.04; Windows* 10
 | Hardware                          | Intel® Programmable Acceleration Card (PAC) with Intel Arria® 10 GX FPGA; <br> Intel® Programmable Acceleration Card (PAC) D5005 (with Intel Stratix® 10 SX FPGA)
-| Software                          | Intel® oneAPI DPC++ Compiler (Beta) <br> Intel® FPGA Add-On for oneAPI Base Toolkit 
+| Software                          | Intel® oneAPI DPC++ Compiler <br> Intel® FPGA Add-On for oneAPI Base Toolkit 
 | What you will learn               | The basics of the of DPC++ pipes extension for FPGA<br> How to declare and use pipes in a DPC++ program
 | Time to complete                  | 15 minutes
 
@@ -247,9 +247,47 @@ Navigate to the "System Viewer" to visualize the structure of the kernel system.
      ```
 
 ### Example of Output
-```
-Input Array Size:  1024
-Enqueuing producer...
-Enqueuing consumer...
-PASSED: The results are correct
-```
+You should see the following output in the console:
+
+1. When running on the FPGA emulator
+    ```
+    Input Array Size: 8192
+    Enqueuing producer...
+    Enqueuing consumer...
+
+    Profiling Info
+      Producer:
+        Start time: 0 ms
+        End time: +8.18174 ms
+        Kernel Duration: 8.18174 ms
+      Consumer:
+        Start time: +7.05307 ms
+        End time: +8.18231 ms
+        Kernel Duration: 1.12924 ms
+      Design Duration: 8.18231 ms
+      Design Throughput: 4.00474 MB/s
+
+    PASSED: The results are correct
+    ```
+    NOTE: The FPGA emulator does not accurately represent the performance nor the relative timing of the kernels (i.e. the start and end times).
+
+2. When running on the FPGA device
+    ```
+    Input Array Size: 1048576
+    Enqueuing producer...
+    Enqueuing consumer...
+
+    Profiling Info
+      Producer:
+        Start time: 0 ms
+        End time: +4.481 ms
+        Kernel Duration: 4.481 ms
+      Consumer:
+        Start time: +0.917 ms
+        End time: +4.484 ms
+        Kernel Duration: 3.568 ms
+      Design Duration: 4.484 ms
+      Design Throughput: 935.348 MB/s
+
+    PASSED: The results are correct
+    ```

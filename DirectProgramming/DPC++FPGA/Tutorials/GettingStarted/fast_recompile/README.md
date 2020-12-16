@@ -8,20 +8,20 @@ This FPGA tutorial demonstrates how to separate the compilation of a program's h
 ---                                 |---
 | OS                                | Linux* Ubuntu* 18.04; Windows* 10
 | Hardware                          | Intel® Programmable Acceleration Card (PAC) with Intel Arria® 10 GX FPGA; <br> Intel® Programmable Acceleration Card (PAC) D5005 (with Intel Stratix® 10 SX FPGA)
-| Software                          | Intel® oneAPI DPC++ Compiler (Beta) <br> Intel® FPGA Add-On for oneAPI Base Toolkit 
+| Software                          | Intel® oneAPI DPC++ Compiler <br> Intel® FPGA Add-On for oneAPI Base Toolkit 
 | What you will learn               | Why to separate host and device code compilation in your FPGA project <br> How to use the `-reuse-exe` and device link methods <br> Which method to choose for your project
 | Time to complete                  | 15 minutes
 
 
 
 ## Purpose
-Intel® oneAPI DPC++ Compiler (Beta) only supports ahead-of-time (AoT) compilation for FPGA, which means that an FPGA device image is generated at compile time. The FPGA device image generation process can take hours to complete. If you make a change that is exclusive to the host code, it is more efficient to recompile your host code only, re-using the existing FPGA device image and circumventing the time-consuming device compilation process.
+Intel® oneAPI DPC++ Compiler only supports ahead-of-time (AoT) compilation for FPGA, which means that an FPGA device image is generated at compile time. The FPGA device image generation process can take hours to complete. If you make a change that is exclusive to the host code, it is more efficient to recompile your host code only, re-using the existing FPGA device image and circumventing the time-consuming device compilation process.
 
-The Intel® oneAPI DPC++ Compiler (Beta) provides two different mechanisms to separate device code and host code compilation.
+The Intel® oneAPI DPC++ Compiler provides two different mechanisms to separate device code and host code compilation.
 * Passing `-reuse-exe=<exe_name>` flag to `dpcpp` instructs the compiler to attempt to reuse the existing FPGA device image.
 * The more explicit "device link" method requires you to separate the host and device code into separate files. When a code change only applies to host-only files, an FPGA device image is not regenerated. 
 
-This tutorial explains both mechanisms and the pros and cons of each. The included code sample demonstrates the device link method.
+This tutorial explains both mechanisms and the pros and cons of each. The included code sample demonstrates the device link method but does **not** demonstrate the use of the `-reuse-exe` flag.
 
 ### Using the `-reuse-exe` flag
 
@@ -40,17 +40,19 @@ dpcpp <files.cpp> -o out.fpga -reuse-exe=out.fpga -Xshardware -fintelfpga
 ```
 If `out.fpga` does not exist, `-reuse-exe` is ignored and the FPGA device image is regenerated. This will always be the case the first time a project is compiled.
 
-If `out.fpga` is found, the compiler verifies that no changes that affect the FPGA device code have been made since the last compilation. If so, the compiler reuses the existing FPGA binary and only the host code is recompiled. The recompilation process takes a few minutes. Note that the device code is *partially* re-compiled (the equivalent of a report flow compile) in order to check that the FPGA binary can safely be reused.
+If `out.fpga` is found, the compiler checks whether any changes affecting the FPGA device code have been made since the last compilation. If no such changes are detected, the compiler reuses the existing FPGA binary and only the host code is recompiled. The recompilation process takes a few minutes. Note that the device code is partially re-compiled (similar to a report flow compile) in order to check that the FPGA binary can safely be reused.
+
+If `out.fpga` is found but the compiler is unable to prove that the FPGA device code will yield a result identical to the last compilation, a warning is printed and the FPGA device code is fully recompiled. Since the compiler checks must be conservative, spurious recompilations can sometimes occur when using `-reuse-exe`.
 
 ### Using the device link method
 
-The program accompanying this tutorial is separated into two files, `main.cpp` and `kernel.cpp`. Only the `kernel.cpp` file contains device code. 
+The program accompanying this tutorial is separated into two files, `host.cpp` and `kernel.cpp`. Only the `kernel.cpp` file contains device code. 
 
-In the normal compilation process, FPGA device image generation happens at link time. As a result, any change to either `main.cpp` or `kernel.cpp` will trigger the regeneration of an FPGA device image. 
+In the normal compilation process, FPGA device image generation happens at link time. As a result, any change to either `host.cpp` or `kernel.cpp` will trigger the regeneration of an FPGA device image. 
 
 ```
 # normal compile command
-dpcpp -fintelfpga main.cpp kernel.cpp -Xshardware -o link.fpga
+dpcpp -fintelfpga host.cpp kernel.cpp -Xshardware -o link.fpga
 ```
 
 The following graph depicts this compilation process:
@@ -78,7 +80,7 @@ The compilation is a 3-step process:
 2. Compile the host code:
    
    ``` 
-   dpcpp -fintelfpga main.cpp -c -o host.o
+   dpcpp -fintelfpga host.cpp -c -o host.o
    ```
    Input files should include all source files that only contain host code. This takes seconds.
 
@@ -94,7 +96,7 @@ The compilation is a 3-step process:
 
 The following graph depicts device link compilation process:
 
-![](fast_recompile.png)
+![](device_link.png)
 
 ### Which method to use?
 Of the two methods described, `-reuse-exe` is easier to use. It also allows you to keep your host and device code as single source, which is preferred for small programs. 
@@ -201,4 +203,4 @@ You can compile and run this tutorial in the Eclipse* IDE (in Linux*) and the Vi
 PASSED: results are correct
 ```
 ### Discussion of Results
-Try modifying `main.cpp` to produce a different output message. Then, perform a host-only recompile via the device link method to see how quickly the design is recompiled.
+Try modifying `host.cpp` to produce a different output message. Then, perform a host-only recompile via the device link method to see how quickly the design is recompiled.
